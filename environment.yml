@@ -5,15 +5,17 @@ channels:
 dependencies:
   - python=3.7.7
   - pip
-  - make
-  - sphinx
-  - pytorch
   - cudatoolkit=10.1
-  - pytest
-  - flake8
+  - pytorch
+  - matplotlib
   - progressbar2
+  - sphinx
+  - flake8
+  - pytest
   - pytest-cov
   - coveralls
+  - make
   - pip:
+    - torch-geometric
     - rstcheck==3.3.1
 prefix: C:\Users\User\Anaconda3\envs\objectives
