@@ -20,3 +20,7 @@ Activate and set environment variables:
 ```
 source activate.sh
 ```
+
+## Docs and Tests
+Build docs with `make build-docs`,
+run tests with `pytest`.
