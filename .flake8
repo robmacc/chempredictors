@@ -1,0 +1,4 @@
+[flake8]
+per-file-ignores =
+    README.md: E501
+    src/main.py: E402

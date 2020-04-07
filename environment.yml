@@ -1,0 +1,19 @@
+name: objectives
+channels:
+  - defaults
+  - anaconda
+dependencies:
+  - python=3.7.7
+  - pip
+  - make
+  - sphinx
+  - pytorch
+  - cudatoolkit=10.1
+  - pytest
+  - flake8
+  - progressbar2
+  - pytest-cov
+  - coveralls
+  - pip:
+    - rstcheck==3.3.1
+prefix: C:\Users\User\Anaconda3\envs\objectives
