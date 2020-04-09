@@ -28,13 +28,17 @@ import torch
 import glob
 import numpy
 import progressbar
+import urllib
 
 # --------------------------------
-dataset_path = './data'
+datasets_path = './data'
 num_mols = 99
 batch_size = 4
 num_batches = num_mols//batch_size
 test_frequency = 10
+qm8_link = 'ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-143-043532/gdb8_22k_elec_spec.txt'
+qm9_link = 'https://ndownloader.figshare.com/files/3195389'
+chembl_link = ''
 # --------------------------------
 
 
@@ -48,7 +52,7 @@ def molToArray():
 
 def loadData():
     # read data from disk
-    mol_list = glob.glob(dataset_path)
+    mol_list = glob.glob(datasets_path)
     expected_num = num_mols
     x = numpy.array([molToArray(mol) for mol in mol_list])
     if len(x) != expected_num:
@@ -73,3 +77,23 @@ def widgets(epoch):
     return [progressbar.FormatLabel("Train Epoch: %2d " % (epoch)),
             progressbar.Bar('=', '[', ']'), ' ',
             progressbar.Percentage()]
+
+
+def downloadData(dataset):
+    if (dataset == 'qm8'):
+        fetch(dataset, qm8_link)
+        unpackQM8()
+    elif (dataset == 'qm9'):
+        fetch(dataset, qm9_link)
+        unpackQM9()
+    elif (dataset == 'chembl'):
+        fetch(dataset, chembl_link)
+        unpackChemBL()
+    else:
+        error('invalid dataset specified.')
+
+
+def fetch(dataset, dataset_link):
+    print('Downloading ' + dataset + ' ...')
+    urllib.request.urlretrieve(dataset_link, datasets_path + '/' + dataset)
+    print(dataset + ' download complete.')

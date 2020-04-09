@@ -27,6 +27,10 @@
 import network
 import utils
 
+dataset = 'qm8'
+if (not utils.dataDownloaded(dataset)):
+    utils.downloadData(dataset)
+
 net = network.Network()
 train_iterator, test_iterator = utils.loadData()
 net.train(train_iterator, test_iterator, 100)
