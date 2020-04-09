@@ -65,17 +65,29 @@ class Network(torch.nn.Module):
     def train(self, train_iterator, test_iterator, epochs):
         self.optimizer.zero_grad()
         for epoch in range(epochs):
-            progress_bar = progressbar.ProgressBar(0, utils.num_batches,
-                                                   utils.widgets(epoch))
-            progress_bar.start()
-            for batch_num, batch in enumerate(train_iterator):
-                output = self.forward(batch)
-                loss = torch.nn.functional.nll_loss(output, batch.y)
-                loss.backward()
-                self.optimizer.step()
-                progress_bar.update(batch_num)
+            progress_bar = self.initProgressBar(epoch)
+            self.propagate(train_iterator, progress_bar)
             if epoch % utils.test_frequency == 0:
-                for batch in test_iterator:
-                    output = self.forward(batch)
-                    loss = torch.nn.functional.nll_loss(output, batch.y)
-                    utils.printTestLoss()
+                self.test(test_iterator)
+
+    def test(self, test_iterator):
+        test_loss = 0
+        for batch in test_iterator:
+            output = self.forward(batch)
+            batch_loss = torch.nn.functional.nll_loss(output, batch.y)
+            test_loss += batch_loss
+        utils.printTestLoss(test_loss)
+
+    def propagate(self, train_iterator, progress_bar):
+        for batch_num, batch in enumerate(train_iterator):
+            output = self.forward(batch)
+            loss = torch.nn.functional.nll_loss(output, batch.y)
+            loss.backward()
+            self.optimizer.step()
+            progress_bar.update(batch_num)
+
+    def initProgressBar(self, epoch):
+        progress_bar = progressbar.ProgressBar(0, utils.num_batches,
+                                               utils.widgets(epoch))
+        progress_bar.start()
+        return progress_bar
