@@ -24,3 +24,6 @@ source activate.sh
 ## Docs and Tests
 Build docs with `make build-docs`,
 run tests with `pytest`.
+
+## Usage
+run from project root with `python src/main.py`
