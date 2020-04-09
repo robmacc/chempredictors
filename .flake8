@@ -1,4 +1,5 @@
 [flake8]
 per-file-ignores =
     README.md: E501
+    tests/test_network.py: E501
     src/main.py: E402
