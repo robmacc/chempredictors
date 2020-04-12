@@ -2,6 +2,7 @@ name: objectives
 channels:
   - defaults
   - anaconda
+  - rdkit
 dependencies:
   - python=3.7.7
   - pip
@@ -9,6 +10,7 @@ dependencies:
   - pytorch
   - matplotlib
   - progressbar2
+  - rdkit
   - sphinx
   - flake8
   - pytest
