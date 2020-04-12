@@ -29,6 +29,7 @@ import glob
 import numpy
 import progressbar
 import urllib
+import molecular
 
 # --------------------------------
 datasets_path = './data'
@@ -47,14 +48,11 @@ def error(msg):
     exit(1)
 
 
-def molToArray():
-
-
 def loadData():
     # read data from disk
     mol_list = glob.glob(datasets_path)
     expected_num = num_mols
-    x = numpy.array([molToArray(mol) for mol in mol_list])
+    x = numpy.array([molecular.molToGraph(mol) for mol in mol_list])
     if len(x) != expected_num:
         error('Expected to find %d mols' % expected_num)
 
