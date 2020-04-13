@@ -184,13 +184,16 @@ def bondFeatures(bond, use_chirality=False):
     return numpy.array(bond_feats)
 
 
-def molToGraph(mol):
+def molToGraph(mol, mol_property, labels):
     '''Parameters: mol: instance of rdkit.Chem.rdchem.Mol'''
+    label = torch.tensor(labels[mol.GetProp(mol_property)])
     atoms = mol.GetAtoms()
     bonds = mol.GetBonds()
     node_features = torch.tensor([atomFeatures(atom) for atom in atoms])
     edge_indices = torch.tensor(getBondPairs(mol))
     edge_attributes = torch.tensor([bondFeatures(bond) for bond in bonds])
-    data = torch_geometric.data.Data(node_features, edge_indices,
-                                     edge_attributes)
-    return data
+    data_shard = torch_geometric.data.Data(x=node_features,
+                                           edge_index=edge_indices,
+                                           edge_attr=edge_attributes,
+                                           y=label)
+    return data_shard

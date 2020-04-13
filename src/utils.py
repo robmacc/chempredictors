@@ -25,11 +25,10 @@
 
 
 import torch
-import glob
-import numpy
 import progressbar
 import urllib
 import molecular
+import rdkit.Chem
 
 # --------------------------------
 datasets_path = './data'
@@ -40,6 +39,8 @@ test_frequency = 10
 qm8_link = 'ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-143-043532/gdb8_22k_elec_spec.txt'
 qm9_link = 'https://ndownloader.figshare.com/files/3195389'
 chembl_link = ''
+solubility_classification_dict = {'(A) low': 0, '(B) medium': 1, '(C) high': 2}
+mol_property = 'SOL_classification'
 # --------------------------------
 
 
@@ -48,25 +49,23 @@ def error(msg):
     exit(1)
 
 
-def loadData():
-    # read data from disk
-    mol_list = glob.glob(datasets_path)
-    expected_num = num_mols
-    x = numpy.array([molecular.molToGraph(mol) for mol in mol_list])
-    if len(x) != expected_num:
-        error('Expected to find %d mols' % expected_num)
+def loadData(train_file, test_file, labels, mol_property):
+    '''Parameters: file: name of data file to load, labels: dictionary of
+    parameters to train on. Returns: training and testing iterators ready for
+    feeding to neural network.'''
+    training_set = [molecular.molToGraph(m, mol_property, labels) for m in
+                    rdkit.Chem.SDMolSupplier(train_file)]
+    testing_set = [molecular.molToGraph(m, mol_property, labels) for m in
+                   rdkit.Chem.SDMolSupplier(test_file)]
 
-    # train-test split
-    train_mols = x[0:round(0.8*expected_num)]  # ~80%
-    test_mols = x[round(0.8*expected_num):]  # ~20%
-
-    # make iterators
-    train_iterator = torch.utils.data.DataLoader(train_mols,
+    train_iterator = torch.utils.data.DataLoader(training_set,
                                                  batch_size=batch_size,
-                                                 shuffle=True, num_workers=2)
-    test_iterator = torch.utils.data.DataLoader(test_mols,
+                                                 shuffle=True, num_workers=2,
+                                                 drop_last=True)
+    test_iterator = torch.utils.data.DataLoader(testing_set,
                                                 batch_size=batch_size,
-                                                shuffle=False, num_workers=2)
+                                                shuffle=True, num_workers=2,
+                                                drop_last=True)
 
     return train_iterator, test_iterator
 
