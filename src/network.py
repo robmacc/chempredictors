@@ -30,7 +30,16 @@ import progressbar
 import utils
 
 
+def setDevice(constructor):
+    def wrappedConstructor():
+        network = constructor()
+        network.to(network.device)
+        return network
+    return wrappedConstructor
+
+
 class Network(torch.nn.Module):
+    @setDevice
     def __init__(self, num_features):
         super(Network, self).__init__()
         self.graph_conv1 = torch_geometric.nn.GCNConv(num_features, 128,
@@ -62,22 +71,6 @@ class Network(torch.nn.Module):
         x = torch.nn.functional.log_softmax(x, dim=1)
         return x
 
-    def train(self, train_iterator, test_iterator, epochs):
-        self.optimizer.zero_grad()
-        for epoch in range(epochs):
-            progress_bar = self.initProgressBar(epoch)
-            self.propagate(train_iterator, progress_bar)
-            if epoch % utils.test_frequency == 0:
-                self.test(test_iterator)
-
-    def test(self, test_iterator):
-        test_loss = 0
-        for batch in test_iterator:
-            output = self.forward(batch)
-            batch_loss = torch.nn.functional.nll_loss(output, batch.y)
-            test_loss += batch_loss
-        utils.printTestLoss(test_loss)
-
     def propagate(self, train_iterator, progress_bar):
         for batch_num, batch in enumerate(train_iterator):
             output = self.forward(batch)
@@ -91,3 +84,19 @@ class Network(torch.nn.Module):
                                                utils.widgets(epoch))
         progress_bar.start()
         return progress_bar
+
+    def test(self, test_iterator):
+        test_loss = 0
+        for batch in test_iterator:
+            output = self.forward(batch)
+            batch_loss = torch.nn.functional.nll_loss(output, batch.y)
+            test_loss += batch_loss
+        utils.printTestLoss(test_loss)
+
+    def train(self, train_iterator, test_iterator, epochs):
+        self.optimizer.zero_grad()
+        for epoch in range(epochs):
+            progress_bar = self.initProgressBar(epoch)
+            self.propagate(train_iterator, progress_bar)
+            if epoch % utils.test_frequency == 0:
+                self.test(test_iterator)
