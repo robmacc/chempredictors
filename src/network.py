@@ -30,16 +30,7 @@ import progressbar
 import src.utils
 
 
-def setDevice(constructor):
-    def wrappedConstructor(constructor):
-        network = constructor()
-        # network.to(network.device)
-        return network
-    return wrappedConstructor
-
-
 class Network(torch.nn.Module):
-    # @setDevice
     def __init__(self, num_features):
         super(Network, self).__init__()
         self.graph_conv1 = torch_geometric.nn.GCNConv(num_features, 128,
@@ -55,6 +46,11 @@ class Network(torch.nn.Module):
         self.device = torch.device('cuda' if torch.cuda.is_available() else
                                    'cpu')
         self.optimizer = torch.optim.Adam(self.parameters(), lr=0.01)
+        self.to(self.device)
+
+    def isCUDA(self):
+        '''Checks if the network has been assigned to the GPU.'''
+        return next(self.parameters()).is_cuda
 
     def forward(self, batch):
         x, edge_index = batch.x, batch.edge_index

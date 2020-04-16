@@ -34,7 +34,7 @@ from .context import network
 
 
 def test_constructor():
-    net = network.Network()
-    assert net.device == 'cuda'
+    net = network.Network(32)
+    assert net.isCUDA()
 
 # def test_forwardPass():
