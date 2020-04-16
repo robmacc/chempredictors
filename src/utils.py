@@ -27,8 +27,8 @@
 import torch
 import progressbar
 import urllib
-import molecular
 import rdkit.Chem
+import src.molecular
 
 # --------------------------------
 datasets_path = './data'
@@ -53,9 +53,9 @@ def loadData(train_file, test_file, labels, mol_property):
     '''Parameters: file: name of data file to load, labels: dictionary of
     parameters to train on. Returns: training and testing iterators ready for
     feeding to neural network.'''
-    training_set = [molecular.molToGraph(m, mol_property, labels) for m in
+    training_set = [src.molecular.molToGraph(m, mol_property, labels) for m in
                     rdkit.Chem.SDMolSupplier(train_file)]
-    testing_set = [molecular.molToGraph(m, mol_property, labels) for m in
+    testing_set = [src.molecular.molToGraph(m, mol_property, labels) for m in
                    rdkit.Chem.SDMolSupplier(test_file)]
 
     train_iterator = torch.utils.data.DataLoader(training_set,

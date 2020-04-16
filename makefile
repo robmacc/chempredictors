@@ -25,15 +25,15 @@ build-docs:
 
 # new environment
 # ---------------
-	# python -m venv env
+	# python -m venv .env
 
 # delete environment
 # ---------------
-	# rm -rf env
+	# rm -rf .env
 
 # activate environment
 # ---------------
-	# source env/Scripts/activate
+	# source .env/Scripts/activate
 
 # install dependencies
 # --------------------
@@ -45,8 +45,8 @@ build-docs:
 
 # install environment
 # -------------------
-	# python -m venv env
-	# source env/Scripts/activate
+	# python -m venv .env
+	# source .env/Scripts/activate
 	# pip install -r requirements.txt
 
 # -----------------------------------------------------------------------------

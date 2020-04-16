@@ -27,19 +27,19 @@
 import torch
 import torch_geometric
 import progressbar
-import utils
+import src.utils
 
 
 def setDevice(constructor):
-    def wrappedConstructor():
+    def wrappedConstructor(constructor):
         network = constructor()
-        network.to(network.device)
+        # network.to(network.device)
         return network
     return wrappedConstructor
 
 
 class Network(torch.nn.Module):
-    @setDevice
+    # @setDevice
     def __init__(self, num_features):
         super(Network, self).__init__()
         self.graph_conv1 = torch_geometric.nn.GCNConv(num_features, 128,
@@ -80,8 +80,8 @@ class Network(torch.nn.Module):
             progress_bar.update(batch_num)
 
     def initProgressBar(self, epoch):
-        progress_bar = progressbar.ProgressBar(0, utils.num_batches,
-                                               utils.widgets(epoch))
+        progress_bar = progressbar.ProgressBar(0, src.utils.num_batches,
+                                               src.utils.widgets(epoch))
         progress_bar.start()
         return progress_bar
 
@@ -91,12 +91,12 @@ class Network(torch.nn.Module):
             output = self.forward(batch)
             batch_loss = torch.nn.functional.nll_loss(output, batch.y)
             test_loss += batch_loss
-        utils.printTestLoss(test_loss)
+        src.utils.printTestLoss(test_loss)
 
     def train(self, train_iterator, test_iterator, epochs):
         self.optimizer.zero_grad()
         for epoch in range(epochs):
             progress_bar = self.initProgressBar(epoch)
             self.propagate(train_iterator, progress_bar)
-            if epoch % utils.test_frequency == 0:
+            if epoch % src.utils.test_frequency == 0:
                 self.test(test_iterator)

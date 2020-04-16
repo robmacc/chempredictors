@@ -12,14 +12,31 @@
 
 ## Environment
 
-Install environment:
+### Windows
+Install CUDA:
+```
+choco install cuda
+```
+Install conda if not already installed:
+```
+choco install anaconda3
+```
+Install conda dependencies and pip:
 ```
 conda env create -f environment.yml
+conda activate objectives
 ```
-Activate and set environment variables:
+Install PyTorch requirements:
 ```
-source activate.sh
+bash install-torch.sh
 ```
+
+<!-- Download cuDNN and extract the files to the CUDA directory: -->
+<!-- ``` -->
+<!-- [cuDNN-download-dir]/cuda/bin/cudnn65_7.dll > `NVIDIA GPU Computing Toolkit`/CUDA/vX.X/bin/ -->
+<!-- [cuDNN-download-dir]/cuda/include/cudnn.h > `NVIDIA GPU Computing Toolkit`/CUDA/vX.X/include/ -->
+<!-- [cuDNN-download-dir]/cuda/lib/x64/cudnn.lib > `NVIDIA GPU Computing Toolkit`/CUDA/vX.X/lib/x64/ -->
+<!-- ``` -->
 
 ## Docs and Tests
 Build docs with `make build-docs`,
