@@ -36,10 +36,10 @@ num_mols = 99
 batch_size = 4
 num_batches = num_mols//batch_size
 test_frequency = 10
-qm8_link = 'ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-143-043532/gdb8_22k_elec_spec.txt'
+qm8_link = 'ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-143-043532/gdb8_22k_elec_spec.txt'  # noqa
 qm9_link = 'https://ndownloader.figshare.com/files/3195389'
 chembl_link = ''
-solubility_classification_dict = {'(A) low': 0, '(B) medium': 1, '(C) high': 2}
+solubility_classification_labels = {'(A) low': 0, '(B) medium': 1, '(C) high': 2}  # noqa
 mol_property = 'SOL_classification'
 # --------------------------------
 
@@ -49,7 +49,7 @@ def error(msg):
     exit(1)
 
 
-def loadData(train_file, test_file, labels, mol_property):
+def loadData(train_file, test_file, labels, mol_property, batch_size):
     '''Parameters: file: name of data file to load, labels: dictionary of
     parameters to train on. Returns: training and testing iterators ready for
     feeding to neural network.'''
@@ -76,18 +76,18 @@ def widgets(epoch):
             progressbar.Percentage()]
 
 
-def downloadData(dataset):
-    if (dataset == 'qm8'):
-        fetch(dataset, qm8_link)
-        unpackQM8()
-    elif (dataset == 'qm9'):
-        fetch(dataset, qm9_link)
-        unpackQM9()
-    elif (dataset == 'chembl'):
-        fetch(dataset, chembl_link)
-        unpackChemBL()
-    else:
-        error('invalid dataset specified.')
+# def downloadData(dataset):
+#     if (dataset == 'qm8'):
+#         fetch(dataset, qm8_link)
+#         unpackQM8()
+#     elif (dataset == 'qm9'):
+#         fetch(dataset, qm9_link)
+#         unpackQM9()
+#     elif (dataset == 'chembl'):
+#         fetch(dataset, chembl_link)
+#         unpackChemBL()
+#     else:
+#         error('invalid dataset specified.')
 
 
 def fetch(dataset, dataset_link):
