@@ -72,6 +72,16 @@ atoms_long = [
     'Mn', 'Zr', 'Cr', 'Pt', 'Hg', 'Pb'
 ]
 degrees = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+bonds = [rdkit.Chem.rdchem.BondType.SINGLE,
+         rdkit.Chem.rdchem.BondType.DOUBLE,
+         rdkit.Chem.rdchem.BondType.TRIPLE,
+         rdkit.Chem.rdchem.BondType.AROMATIC]
+isomers = ["STEREONONE", "STEREOANY", "STEREOZ", "STEREOE"]
+atoms_features_length_no_chirality = (len(atoms_long) + len(degrees)
+                                      + len(valences) + 2
+                                      + len(hybridizations)
+                                      + 1 + len(num_hydrogens))
+bond_features_length_no_chirality = (len(bonds) + 1 + 1)
 
 
 def getIndex(l, element):
@@ -114,17 +124,17 @@ def atomToIndex(atom):
     return featuresToIndex(features_list, intervals)
 
 
-def booleanOneHot(x, allowable_set):
+def booleanOneHotEncoding(x, allowable_set):
     '''Returns: a boolean one-hot encoding of the feature x given
     the allowable_set.'''
     if x not in allowable_set:
-        raise Exception("input {0} not in allowable set{1}:"
+        raise Exception("input {0} not in allowable set {1}:"
                         .format(x, allowable_set))
     return list(map(lambda s: x == s, allowable_set))
 
 
-def atomFeatures(atom, atom_to_index=False, explicit_H=False,
-                 use_chirality=False):
+def encodeAtomFeatures(atom, atom_to_index=False, explicit_H=False,
+                       use_chirality=False):
     '''Parameters: atom: instance of rdkit.Chem.rdchem.atom
     Returns: atom index encoding if atom_tom_index is True, atom feature
     vector otherwise.'''
@@ -132,20 +142,20 @@ def atomFeatures(atom, atom_to_index=False, explicit_H=False,
         return numpy.array([atomToIndex(atom)])
     else:
         results = (
-            booleanOneHot(atom.GetSymbol(), atoms_long) +
-            booleanOneHot(atom.GetDegree(), degrees) +
-            booleanOneHot(atom.GetImplicitValence(), valences) +
+            booleanOneHotEncoding(atom.GetSymbol(), atoms_long) +
+            booleanOneHotEncoding(atom.GetDegree(), degrees) +
+            booleanOneHotEncoding(atom.GetImplicitValence(), valences) +
             [atom.GetFormalCharge(), atom.GetNumRadicalElectrons()] +
-            booleanOneHot(atom.GetHybridization(), hybridizations) +
+            booleanOneHotEncoding(atom.GetHybridization(), hybridizations) +
             [atom.GetIsAromatic()]
         )
     if not explicit_H:
-        results = results + booleanOneHot(atom.GetTotalNumHs(),
-                                          num_hydrogens)
+        results = results + booleanOneHotEncoding(atom.GetTotalNumHs(),
+                                                  num_hydrogens)
     if use_chirality:
         try:
             results = results + (
-                booleanOneHot(atom.GetProp('_CIPCode'), chiralities) +
+                booleanOneHotEncoding(atom.GetProp('_CIPCode'), chiralities) +
                 [atom.HasProp('_ChiralityPossible')]
             )
         except Exception:
@@ -164,34 +174,31 @@ def getBondPairs(mol):
     return res
 
 
-def bondFeatures(bond, use_chirality=False):
+def encodeBondFeatures(bond, use_chirality=False):
     '''Parameters: bond: instance of rdkit.Chem.rdchem.Bond.
     Returns: a list encoding bond features as positional booleans.'''
-    bt = bond.GetBondType()
-    bond_feats = [
-        bt == rdkit.Chem.rdchem.BondType.SINGLE,
-        bt == rdkit.Chem.rdchem.BondType.DOUBLE,
-        bt == rdkit.Chem.rdchem.BondType.TRIPLE,
-        bt == rdkit.Chem.rdchem.BondType.AROMATIC,
-        bond.GetIsConjugated(),
-        bond.IsInRing()
-    ]
+    bond_feats = booleanOneHotEncoding(bond.GetBondType(), bonds)
+    bond_feats += [bond.GetIsConjugated()]
+    bond_feats += [bond.IsInRing()]
     if use_chirality:
-        bond_feats = bond_feats + booleanOneHot(
-                            str(bond.GetStereo()),
-                            ["STEREONONE", "STEREOANY", "STEREOZ", "STEREOE"]
-                        )
+        bond_feats = bond_feats + booleanOneHotEncoding(str(bond.GetStereo()),
+                                                        isomers)
     return numpy.array(bond_feats)
 
 
 def molToGraph(mol, mol_property, labels):
-    '''Parameters: mol: instance of rdkit.Chem.rdchem.Mol'''
+    '''Parameters: mol: instance of rdkit.Chem.rdchem.Mol.
+    Returns: data_shard: instance of torch_geometric.data.Data, containing
+    the encoded graph, with properties:
+    x: node features with shape: (# atoms, # atom features),
+    edge_index: adjacency matrix with shape: (2, # bonds * 2),
+    edge_attr: edge features with shape: (# bonds, # bond features).'''
     label = torch.tensor(labels[mol.GetProp(mol_property)])
     atoms = mol.GetAtoms()
     bonds = mol.GetBonds()
-    node_features = torch.tensor([atomFeatures(atom) for atom in atoms])
+    node_features = torch.tensor([encodeAtomFeatures(atom) for atom in atoms])
     edge_indices = torch.tensor(getBondPairs(mol))
-    edge_attributes = torch.tensor([bondFeatures(bond) for bond in bonds])
+    edge_attributes = torch.tensor([encodeBondFeatures(bond) for bond in bonds])  # noqa
     data_shard = torch_geometric.data.Data(x=node_features,
                                            edge_index=edge_indices,
                                            edge_attr=edge_attributes,
