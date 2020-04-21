@@ -95,6 +95,7 @@ def test_molToGraph():
     atoms = mol.GetAtoms()
     bonds = mol.GetBonds()
     # encode atom to graph
+    # expected shapes of graph properties
     node_features_shape = (len(atoms),
                            molecular.atoms_features_length_no_chirality)
     adjacency_matrix_shape = (2, len(bonds) * 2)
@@ -102,10 +103,14 @@ def test_molToGraph():
                            molecular.bond_features_length_no_chirality)
     graph = molecular.molToGraph(mol, 'SOL_classification',
                                  utils.solubility_classification_labels)
+    # check types of graph properties
     assert isinstance(graph, torch_geometric.data.Data)
     assert isinstance(graph.x, torch.Tensor)
     assert isinstance(graph.edge_index, torch.Tensor)
     assert isinstance(graph.edge_attr, torch.Tensor)
+    # check shapes of graph properties
     assert graph.x.shape == node_features_shape
     assert graph.edge_index.shape == adjacency_matrix_shape
     assert graph.edge_attr.shape == edge_features_shape
+    assert graph.y.shape == (1, 1)
+    assert graph.y == 0
