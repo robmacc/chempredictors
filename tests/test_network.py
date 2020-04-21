@@ -45,7 +45,7 @@ def test_constructor():
 #     singleLayerNetwork = network.OneLayerNetwork(num_features=32,
 #                                                  learning_rate=0.01)
 #     singleLayerNetwork.forward(data)
-#     assert singleLayerNetwork.one_layer_output == 
+#     assert singleLayerNetwork.one_layer_output ==
 #     assert singleLayerNetwork.activated_output ==
 
 
