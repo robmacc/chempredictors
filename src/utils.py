@@ -24,11 +24,11 @@
 #  ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
 
 
-import torch
+import torch_geometric
 import progressbar
 import urllib
-import rdkit.Chem
 import src.molecular
+import src.dataset
 
 # --------------------------------
 datasets_path = './data'
@@ -49,23 +49,22 @@ def error(msg):
     exit(1)
 
 
-def loadData(train_file, test_file, labels, mol_property, batch_size):
+def loadData(train_file, test_file, labels, mol_property, batch_size, shuffle):
     '''Parameters: file: name of data file to load, labels: dictionary of
     parameters to train on. Returns: training and testing iterators ready for
     feeding to neural network.'''
-    training_set = [src.molecular.molToGraph(m, mol_property, labels) for m in
-                    rdkit.Chem.SDMolSupplier(train_file)]
-    testing_set = [src.molecular.molToGraph(m, mol_property, labels) for m in
-                   rdkit.Chem.SDMolSupplier(test_file)]
-
-    train_iterator = torch.utils.data.DataLoader(training_set,
-                                                 batch_size=batch_size,
-                                                 shuffle=True, num_workers=2,
-                                                 drop_last=True)
-    test_iterator = torch.utils.data.DataLoader(testing_set,
-                                                batch_size=batch_size,
-                                                shuffle=True, num_workers=2,
-                                                drop_last=True)
+    training_set = src.dataset.Dataset(train_file, labels, mol_property)
+    testing_set = src.dataset.Dataset(test_file, labels, mol_property)
+    # if num_workers != 0 then a collate_fn must be provided to DataLoader
+    # otherwise the default lambda is use which is unpicklable on windows
+    train_iterator = torch_geometric.data.DataLoader(training_set,
+                                                     batch_size=batch_size,
+                                                     shuffle=shuffle,
+                                                     drop_last=True)
+    test_iterator = torch_geometric.data.DataLoader(testing_set,
+                                                    batch_size=batch_size,
+                                                    shuffle=shuffle,
+                                                    drop_last=True)
 
     return train_iterator, test_iterator
 
