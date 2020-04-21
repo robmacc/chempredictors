@@ -34,11 +34,12 @@ bash install-torch.sh
 ### Linux
 Install CUDA:
 ```
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-ubuntu1604.pin
+sudo mv cuda-ubuntu1604.pin /etc/apt/preferences.d/cuda-repository-pin-600
 sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
-wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.2.148-1_amd64.deb
-sudo dpkg -i cuda-repo-ubuntu1604_9.2.148-1_amd64.deb
-sudo apt-get update -qq
-sudo apt-get install -y -qq --no-install-recommends cuda-9-2
+sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/ /"
+sudo apt-get update
+sudo apt-get -y install cuda
 ```
 Install conda:
 ```
