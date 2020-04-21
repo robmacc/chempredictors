@@ -193,7 +193,7 @@ def molToGraph(mol, mol_property, labels):
     x: node features with shape: (# atoms, # atom features),
     edge_index: adjacency matrix with shape: (2, # bonds * 2),
     edge_attr: edge features with shape: (# bonds, # bond features).'''
-    label = torch.tensor(labels[mol.GetProp(mol_property)])
+    label = torch.tensor([[labels[mol.GetProp(mol_property)]]])
     atoms = mol.GetAtoms()
     bonds = mol.GetBonds()
     node_features = torch.tensor([encodeAtomFeatures(atom) for atom in atoms])
