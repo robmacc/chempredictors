@@ -34,7 +34,19 @@ from .context import network
 
 
 def test_constructor():
-    net = network.Network(32)
-    assert net.isCUDA()
+    # net = network.Network(num_features=32, learning_rate=0.01)
+    net2 = network.SolubilityNetwork(num_features=32, learning_rate=0.01)
+    net3 = network.OneLayerNetwork(num_features=32, learning_rate=0.01)
+    assert net2.isCUDA()
+    assert net3.isCUDA()
+
+
+# def test_one_layer_GCN():
+#     singleLayerNetwork = network.OneLayerNetwork(num_features=32,
+#                                                  learning_rate=0.01)
+#     singleLayerNetwork.forward(data)
+#     assert singleLayerNetwork.one_layer_output == 
+#     assert singleLayerNetwork.activated_output ==
+
 
 # def test_forwardPass():
