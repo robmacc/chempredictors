@@ -1,11 +1,6 @@
 version: 2
 conda:
-   environment: environment.yml
-python:
-   install:
-      - requirements: docs/requirements.txt
-      - method: pip
-        path: .
+   environment: docs/environment.yml
 sphinx:
   builder: singlehtml
   configuration: docs/conf.p
