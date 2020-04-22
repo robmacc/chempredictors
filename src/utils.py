@@ -27,8 +27,7 @@
 import torch_geometric
 import progressbar
 import urllib
-import src.molecular
-import src.dataset
+from . import dataset
 
 # --------------------------------
 datasets_path = './data'
@@ -53,8 +52,8 @@ def loadData(train_file, test_file, labels, mol_property, batch_size, shuffle):
     '''Parameters: file: name of data file to load, labels: dictionary of
     parameters to train on. Returns: training and testing iterators ready for
     feeding to neural network.'''
-    training_set = src.dataset.Dataset(train_file, labels, mol_property)
-    testing_set = src.dataset.Dataset(test_file, labels, mol_property)
+    training_set = dataset.Dataset(train_file, labels, mol_property)
+    testing_set = dataset.Dataset(test_file, labels, mol_property)
     # if num_workers != 0 then a collate_fn must be provided to DataLoader
     # otherwise the default lambda is use which is unpicklable on windows
     train_iterator = torch_geometric.data.DataLoader(training_set,

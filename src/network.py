@@ -27,7 +27,7 @@
 import torch
 import torch_geometric
 import progressbar
-import src.utils
+from . import utils
 import abc
 
 
@@ -53,8 +53,8 @@ class Network(abc.ABC, torch.nn.Module):
             progress_bar.update(batch_num)
 
     def initProgressBar(self, epoch):
-        progress_bar = progressbar.ProgressBar(0, src.utils.num_batches,
-                                               src.utils.widgets(epoch))
+        progress_bar = progressbar.ProgressBar(0, utils.num_batches,
+                                               utils.widgets(epoch))
         progress_bar.start()
         return progress_bar
 
@@ -64,14 +64,14 @@ class Network(abc.ABC, torch.nn.Module):
             output = self.forward(batch)
             batch_loss = torch.nn.functional.nll_loss(output, batch.y)
             test_loss += batch_loss
-        src.utils.printTestLoss(test_loss)
+        utils.printTestLoss(test_loss)
 
     def train(self, train_iterator, test_iterator, epochs):
         self.optimizer.zero_grad()
         for epoch in range(epochs):
             progress_bar = self.initProgressBar(epoch)
             self.propagate(train_iterator, progress_bar)
-            if epoch % src.utils.test_frequency == 0:
+            if epoch % utils.test_frequency == 0:
                 self.test(test_iterator)
 
     def setDevice(self):
