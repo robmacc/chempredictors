@@ -9,14 +9,14 @@ before_install:
   - export PATH=/home/travis/miniconda2/bin:$PATH
   - conda update --yes conda
   # CUDA
-  - wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-ubuntu1604.pin
-  - sudo mv cuda-ubuntu1604.pin /etc/apt/preferences.d/cuda-repository-pin-600
-  - sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
-  - sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/ /"
-  - sudo apt-get update
+  # - wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-ubuntu1604.pin
+  # - sudo mv cuda-ubuntu1604.pin /etc/apt/preferences.d/cuda-repository-pin-600
+  # - sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
+  # - sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/ /"
+  # - sudo apt-get update
 install:
   # CUDA
-  - sudo apt-get -y install cuda
+  # - sudo apt-get -y install cuda
   # Conda
   - conda env create --quiet -f environment.yml
   - source activate objectives
@@ -25,5 +25,5 @@ install:
 script:
   - pytest --cov=src
   - flake8 src tests
-after_success:
+after_script:
   - coveralls
