@@ -3,8 +3,9 @@ conda:
    environment: environment.yml
 python:
    install:
-      requirements: requirements.txt
-      method: pip
+      - requirements: docs/requirements.txt
+      - method: pip
+        path: .
 sphinx:
   builder: singlehtml
-  configuration: docs/conf.py
+  configuration: docs/conf.p
