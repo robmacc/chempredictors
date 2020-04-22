@@ -40,6 +40,10 @@ class Network(abc.ABC, torch.nn.Module):
         '''Checks if the network has been assigned to the GPU.'''
         return next(self.parameters()).is_cuda
 
+    def isCPU(self):
+        '''Checks if the network has been assigned to the CPU.'''
+        return not next(self.parameters()).is_cuda
+
     @abc.abstractmethod
     def forward(self, batch):
         pass

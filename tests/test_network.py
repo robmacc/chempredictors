@@ -30,6 +30,7 @@
 #    ╚═╝   ╚══════╝╚══════╝   ╚═╝
 
 
+import torch
 from .context import network
 
 
@@ -37,8 +38,12 @@ def test_constructor():
     # net = network.Network(num_features=32, learning_rate=0.01)
     net2 = network.SolubilityNetwork(num_features=32, learning_rate=0.01)
     net3 = network.OneLayerNetwork(num_features=32, learning_rate=0.01)
-    assert net2.isCUDA()
-    assert net3.isCUDA()
+    if torch.cuda.is_available():
+        assert net2.isCUDA()
+        assert net3.isCUDA()
+    else:
+        assert net2.isCPU()
+        assert net3.isCPU()
 
 
 # def test_one_layer_GCN():
