@@ -15,4 +15,5 @@ dependencies:
   - coveralls
   - pip:
     - rstcheck
+    - readthedocs-sphinx-ext
 prefix: C:\tools\Anaconda3\envs\objectives
