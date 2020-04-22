@@ -118,8 +118,8 @@ def featuresToIndex(features_list, intervals):
 
 
 def atomToIndex(atom):
-    '''Parameters: atom: instance of rdkit.Chem.rdchem.atom
-    Returns: unique index corresponding to atom type.'''
+    ''':param atom: instance of :class:`rdkit.Chem.rdchem.Atom`
+    :return: unique index corresponding to atom type'''
     features_list = getFeatureList(atom)
     return featuresToIndex(features_list, intervals)
 
@@ -135,9 +135,22 @@ def booleanOneHotEncoding(x, allowable_set):
 
 def encodeAtomFeatures(atom, atom_to_index=False, explicit_H=False,
                        use_chirality=False):
-    '''Parameters: atom: instance of rdkit.Chem.rdchem.atom
-    Returns: atom index encoding if atom_tom_index is True, atom feature
-    vector otherwise.'''
+    """Encode the given atom into it's node feature vector.
+
+    :param atom: atom instance
+    :type atom: rdkit.Chem.rdchem.atom
+    :param atom_to_index: whether to use index representation, defaults to
+                          False
+    :type atom_to_index: bool, optional
+    :param explicit_H: whether hydrogens are treated as explicit atoms or
+                       inferred, defaults to False
+    :type explicit_H: bool, optional
+    :param use_chirality: whether to include the molecules chirality in node
+                          feature vectors, defaults to False
+    :type use_chirality: bool, optional
+    :return: node feature vector
+    :rtype: numpy.array
+    """
     if atom_to_index:
         return numpy.array([atomToIndex(atom)])
     else:
@@ -163,9 +176,19 @@ def encodeAtomFeatures(atom, atom_to_index=False, explicit_H=False,
                                  [atom.HasProp('_ChiralityPossible')])
     return numpy.array(results)
 
+    # '''Parameters: atom: instance of rdkit.Chem.rdchem.atom
+    # Returns: atom index encoding if atom_tom_index is True, atom feature
+    # vector otherwise.'''
 
-def getBondPairs(mol):
-    '''Parameters: mol: instance of rdkit.Chem.rdchem.Mol'''
+
+def generateAdjacencyMatrix(mol):
+    """Generates adjacency matrix for the given molecule.
+
+    :param mol: molecule
+    :type mol: :class:`rdkit.Chem.rdchem.Mol`
+    :return: adjacency matrix
+    :rtype: list
+    """
     bonds = mol.GetBonds()
     res = [[], []]
     for bond in bonds:
@@ -175,8 +198,16 @@ def getBondPairs(mol):
 
 
 def encodeBondFeatures(bond, use_chirality=False):
-    '''Parameters: bond: instance of rdkit.Chem.rdchem.Bond.
-    Returns: a list encoding bond features as positional booleans.'''
+    """Encode the given bond into it's edge feature vector.
+
+    :param bond: molecular bond
+    :type bond: :class:`rdkit.Chem.rdchem.Bond`
+    :param use_chirality: whether to include bond chirality in the encoding,
+                          defaults to False
+    :type use_chirality: bool, optional
+    :return: encoded bond
+    :rtype: `numpy.array`
+    """
     bond_feats = booleanOneHotEncoding(bond.GetBondType(), bonds)
     bond_feats += [bond.GetIsConjugated()]
     bond_feats += [bond.IsInRing()]
@@ -187,17 +218,22 @@ def encodeBondFeatures(bond, use_chirality=False):
 
 
 def molToGraph(mol, mol_property, labels):
-    '''Parameters: mol: instance of rdkit.Chem.rdchem.Mol.
-    Returns: data_shard: instance of torch_geometric.data.Data, containing
-    the encoded graph, with properties:
-    x: node features with shape: (# atoms, # atom features),
-    edge_index: adjacency matrix with shape: (2, # bonds * 2),
-    edge_attr: edge features with shape: (# bonds, # bond features).'''
+    """Converts a rdkit molecule to a torch geometric graph.
+
+    :param mol: molecule instance
+    :type mol: :class:`rdkit.Chem.rdchem.Mol`
+    :param mol_property: target physical or chemical property
+    :type mol_property: string
+    :param labels: dictionary of integers corresponding to property values
+    :type labels: dictionary
+    :return: torch geometric graph
+    :rtype: :class:`torch_geometric.data.Data`
+    """
     label = torch.tensor([[labels[mol.GetProp(mol_property)]]])
     atoms = mol.GetAtoms()
     bonds = mol.GetBonds()
     node_features = torch.tensor([encodeAtomFeatures(atom) for atom in atoms])
-    edge_indices = torch.tensor(getBondPairs(mol))
+    edge_indices = torch.tensor(generateAdjacencyMatrix(mol))
     edge_attributes = torch.tensor([encodeBondFeatures(bond) for bond in bonds])  # noqa
     data_shard = torch_geometric.data.Data(x=node_features,
                                            edge_index=edge_indices,

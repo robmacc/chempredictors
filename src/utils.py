@@ -49,9 +49,25 @@ def error(msg):
 
 
 def loadData(train_file, test_file, labels, mol_property, batch_size, shuffle):
-    '''Parameters: file: name of data file to load, labels: dictionary of
-    parameters to train on. Returns: training and testing iterators ready for
-    feeding to neural network.'''
+    """Load training and testing data files into iterables for feeding a
+    neural network.
+
+    :param train_file: file of molecules for training
+    :type train_file: .sdf
+    :param test_file: file of molecules for testing
+    :type test_file: .sdf
+    :param labels: map from property string to integer class
+    :type labels: dictionary
+    :param mol_property: target property for training
+    :type mol_property: string
+    :param batch_size: number of molecules to feed network on each iteration
+    :type batch_size: int
+    :param shuffle: whether or not to randomize molecule order on load
+    :type shuffle: bool
+    :return: pair of training and testing iterators
+    :rtype: tuple (torch_geometric.data.DataLoader,
+                   torch_geometric.data.DataLoader)
+    """
     training_set = dataset.Dataset(train_file, labels, mol_property)
     testing_set = dataset.Dataset(test_file, labels, mol_property)
     # if num_workers != 0 then a collate_fn must be provided to DataLoader
