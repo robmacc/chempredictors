@@ -1,6 +1,6 @@
 version: 2
 conda:
-   environment: environment-linux.yml
+   environment: docs/environment.yml
 sphinx:
   builder: singlehtml
   configuration: docs/conf.p
