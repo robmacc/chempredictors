@@ -19,12 +19,12 @@ jobs:
       # -----------------------------------
       - name: install flake
       # -----------------------------------
-      - shell: bash -l {0}
+        shell: bash -l {0}
         run: |
           pip install flake8
       # -----------------------------------
       - name: run flake
       # -----------------------------------
-      - shell: bash -l {0}
+        shell: bash -l {0}
         run: |
           flake8 src tests
