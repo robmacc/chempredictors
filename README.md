@@ -9,6 +9,7 @@
 [![Documentation Status](https://readthedocs.org/projects/objectives/badge/?version=latest)](https://objectives.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.org/robmacc/objectives.svg?branch=master)](https://travis-ci.org/robmacc/objectives)
 [![Coverage Status](https://coveralls.io/repos/github/robmacc/objectives/badge.svg?branch=master)](https://coveralls.io/github/robmacc/objectives?branch=master)
+![build docs](https://github.com/robmacc/objectives/workflows/build%20docs/badge.svg)
 ![linting](https://github.com/robmacc/objectives/workflows/linting/badge.svg)
 
 ## Environment
