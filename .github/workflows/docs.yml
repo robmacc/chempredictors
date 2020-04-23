@@ -28,9 +28,9 @@ jobs:
         uses: goanpeca/setup-miniconda@v1
         with:
           activate-environment: objectives
-          environment-file: environment-linux.yml
+          environment-file: environment.yml
           python-version: 3.7
-          condarc-file: environment-linux.yml
+          condarc-file: environment.yml
           auto-activate-base: false
       # -----------------------------------
       - name: check environment
@@ -39,6 +39,12 @@ jobs:
         run: |
           conda info
           conda list
+      # -----------------------------------
+      - name: install pytorch with pip
+      # -----------------------------------
+        shell: bash -l {0}
+        run: |
+          bash install-torch.sh
       # -----------------------------------
       - name: build docs
       # -----------------------------------
