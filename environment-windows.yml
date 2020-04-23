@@ -23,5 +23,4 @@ dependencies:
     - https://pytorch-geometric.com/whl/torch-1.4.0/torch_cluster-latest%2Bcu101-cp37-cp37m-win_amd64.whl
     - https://pytorch-geometric.com/whl/torch-1.4.0/torch_spline_conv-latest%2Bcu101-cp37-cp37m-win_amd64.whl
     - torch-geometric
-    - readthedocs-sphinx-ext
 prefix: C:\tools\Anaconda3\envs\objectives
