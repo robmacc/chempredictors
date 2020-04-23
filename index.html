@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Objectives documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html#document-index">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html#document-index">Objectives</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-src.molecular">Molecular</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-src.utils">Utils</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html#document-index">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-objectives-s-documentation">
+<h1>Welcome to Objectives’s documentation!<a class="headerlink" href="#welcome-to-objectives-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<span id="document-examples"></span><div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-modules"></span><div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-src.molecular">
+<span id="molecular"></span><h3>Molecular<a class="headerlink" href="#module-src.molecular" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="src.molecular.atomToIndex">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">atomToIndex</code><span class="sig-paren">(</span><em class="sig-param">atom</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.atomToIndex" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>atom</strong> – instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">rdkit.Chem.rdchem.Atom</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>unique index corresponding to atom type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.booleanOneHotEncoding">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">booleanOneHotEncoding</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">allowable_set</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.booleanOneHotEncoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns: a boolean one-hot encoding of the feature x given
+the allowable_set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.encodeAtomFeatures">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">encodeAtomFeatures</code><span class="sig-paren">(</span><em class="sig-param">atom</em>, <em class="sig-param">atom_to_index=False</em>, <em class="sig-param">explicit_H=False</em>, <em class="sig-param">use_chirality=False</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.encodeAtomFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode the given atom into it’s node feature vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom</strong> (<em>rdkit.Chem.rdchem.atom</em>) – atom instance</p></li>
+<li><p><strong>atom_to_index</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use index representation, defaults to
+False</p></li>
+<li><p><strong>explicit_H</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether hydrogens are treated as explicit atoms or
+inferred, defaults to False</p></li>
+<li><p><strong>use_chirality</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to include the molecules chirality in node
+feature vectors, defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>node feature vector</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.encodeBondFeatures">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">encodeBondFeatures</code><span class="sig-paren">(</span><em class="sig-param">bond</em>, <em class="sig-param">use_chirality=False</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.encodeBondFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode the given bond into it’s edge feature vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bond</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">rdkit.Chem.rdchem.Bond</span></code>) – molecular bond</p></li>
+<li><p><strong>use_chirality</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to include bond chirality in the encoding,
+defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>encoded bond</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.featuresToIndex">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">featuresToIndex</code><span class="sig-paren">(</span><em class="sig-param">features_list</em>, <em class="sig-param">intervals</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.featuresToIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters: features_list: list of atom features, intervals: list of
+cumulative atom features list lengths.
+Returns: features list converted to index</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.generateAdjacencyMatrix">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">generateAdjacencyMatrix</code><span class="sig-paren">(</span><em class="sig-param">mol</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.generateAdjacencyMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates adjacency matrix for the given molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mol</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">rdkit.Chem.rdchem.Mol</span></code>) – molecule</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adjacency matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.getFeatureList">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">getFeatureList</code><span class="sig-paren">(</span><em class="sig-param">atom</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.getFeatureList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters: atom: instance of rdkit.Chem.rdchem.atom
+Returns: list of features for the given atom.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.getIndex">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">getIndex</code><span class="sig-paren">(</span><em class="sig-param">l</em>, <em class="sig-param">element</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.getIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters: l: list, element: element in l.
+Returns: the index of element in l, and len(l) if not found.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.getIntervals">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">getIntervals</code><span class="sig-paren">(</span><em class="sig-param">l</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.getIntervals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters: l: list of lists.
+Returns: list where the elements are the cumulative products of the lengths
+of the lists in l</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.molecular.molToGraph">
+<code class="sig-prename descclassname">src.molecular.</code><code class="sig-name descname">molToGraph</code><span class="sig-paren">(</span><em class="sig-param">mol</em>, <em class="sig-param">mol_property</em>, <em class="sig-param">labels</em><span class="sig-paren">)</span><a class="headerlink" href="#src.molecular.molToGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a rdkit molecule to a torch geometric graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">rdkit.Chem.rdchem.Mol</span></code>) – molecule instance</p></li>
+<li><p><strong>mol_property</strong> (<em>string</em>) – target physical or chemical property</p></li>
+<li><p><strong>labels</strong> (<em>dictionary</em>) – dictionary of integers corresponding to property values</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>torch geometric graph</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.utils">
+<span id="utils"></span><h3>Utils<a class="headerlink" href="#module-src.utils" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="src.utils.loadData">
+<code class="sig-prename descclassname">src.utils.</code><code class="sig-name descname">loadData</code><span class="sig-paren">(</span><em class="sig-param">train_file</em>, <em class="sig-param">test_file</em>, <em class="sig-param">labels</em>, <em class="sig-param">mol_property</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">shuffle</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.loadData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load training and testing data files into iterables for feeding a
+neural network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_file</strong> (<em>sdf</em>) – file of molecules for training</p></li>
+<li><p><strong>test_file</strong> (<em>sdf</em>) – file of molecules for testing</p></li>
+<li><p><strong>labels</strong> (<em>dictionary</em>) – map from property string to integer class</p></li>
+<li><p><strong>mol_property</strong> (<em>string</em>) – target property for training</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – number of molecules to feed network on each iteration</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em>) – whether or not to randomize molecule order on load</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pair of training and testing iterators</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple (torch_geometric.data.DataLoader,
+torch_geometric.data.DataLoader)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Rob Maccallum.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
