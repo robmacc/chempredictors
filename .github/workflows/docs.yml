@@ -21,6 +21,9 @@ jobs:
           python-version: 3.7
           condarc-file: environment-linux.yml
           auto-activate-base: false
+      # -----------------------------------
+      - name: check environment
+      # -----------------------------------
         shell: bash -l {0}
         run: |
           conda info
