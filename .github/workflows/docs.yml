@@ -29,13 +29,13 @@ jobs:
           conda info
           conda list
       # -----------------------------------
-      # - name: build docs
+      - name: build docs
       # -----------------------------------
       # - uses: actions/checkout@v1
-      # - uses: ammaraskar/sphinx-action@master
-      #   with:
-      #     build-command: "sphinx-build -b singlehtml . _build"
-      #     docs-folder: "docs/"
+        uses: ammaraskar/sphinx-action@master
+        with:
+          build-command: "sphinx-build -b singlehtml . _build"
+          docs-folder: "docs/"
       # -----------------------------------
       # - name: Commit documentation changes
       # -----------------------------------
