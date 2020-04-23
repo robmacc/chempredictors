@@ -15,12 +15,12 @@ jobs:
       # -----------------------------------
         uses: actions/checkout@v2
         uses: goanpeca/setup-miniconda@v1
-          with:
-            activate-environment: objectives
-            environment-file: environment-linux.yml
-            python-version: 3.7
-            condarc-file: environment-linux.yml
-            auto-activate-base: false
+        with:
+          activate-environment: objectives
+          environment-file: environment-linux.yml
+          python-version: 3.7
+          condarc-file: environment-linux.yml
+          auto-activate-base: false
         shell: bash -l {0}
         run: |
           conda info
