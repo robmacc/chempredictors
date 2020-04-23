@@ -44,7 +44,7 @@ jobs:
       # -----------------------------------
         shell: bash -l {0}
         run: |
-          bash install-torch.sh
+          bash install-torch-linux.sh
       # -----------------------------------
       - name: build docs
       # -----------------------------------
