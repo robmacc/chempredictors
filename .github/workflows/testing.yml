@@ -1,0 +1,65 @@
+name: testing
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test-on-linux:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: free disk space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
+          docker rmi $(docker image ls -aq)
+          df -h
+
+      - name: install CUDA
+        shell: bash -l {0}
+        run: |
+          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-ubuntu1604.pin
+          sudo mv cuda-ubuntu1604.pin /etc/apt/preferences.d/cuda-repository-pin-600
+          sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
+          sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/ /"
+          sudo apt-get update
+          sudo apt-get -y install cuda
+
+      - name: set up conda environment
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          activate-environment: objectives
+          environment-file: environment.yml
+          python-version: 3.7
+          condarc-file: environment.yml
+          auto-activate-base: false
+
+      - name: check environment
+        shell: bash -l {0}
+        run: |
+          conda info
+          conda list
+
+      - name: install pytorch with pip
+        shell: bash -l {0}
+        run: |
+          export TMPDIR='/var/tmp'
+          pip install torch===1.4.0 torchvision===0.5.0 -f https://download.pytorch.org/whl/torch_stable.html
+          pip install torch-scatter==latest+cu101 -f https://pytorch-geometric.com/whl/torch-1.4.0.html
+          pip install torch-sparse==latest+cu101 -f https://pytorch-geometric.com/whl/torch-1.4.0.html
+          pip install torch-cluster==latest+cu101 -f https://pytorch-geometric.com/whl/torch-1.4.0.html 
+          pip install torch-spline-conv==latest+cu101 -f https://pytorch-geometric.com/whl/torch-1.4.0.html
+          pip install torch-geometric
+
+      - name: test with pytest
+        shell: bash -l {0}
+        run: |
+          pytest --cov=src
+
+      - name: coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
