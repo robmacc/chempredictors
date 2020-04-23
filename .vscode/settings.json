@@ -1,7 +1,0 @@
-{
-    "restructuredtext.confPath": "${workspaceFolder}\\docs",
-    "python.pythonPath": "C:\\tools\\Anaconda3\\envs\\objectives\\python.exe",
-    "python.autoComplete.extraPaths": [
-        "C:\\tools\\Anaconda3\\envs\\objectives"
-    ]
-}
