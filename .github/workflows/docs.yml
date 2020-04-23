@@ -1,0 +1,56 @@
+name: build docs
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  # --------------------------------------
+  build-and-publish-docs:
+  # --------------------------------------
+    runs-on: ubuntu-latest
+    steps:
+      # -----------------------------------
+      - name: set up conda environment
+      # -----------------------------------
+        uses: actions/checkout@v2
+        uses: goanpeca/setup-miniconda@v1
+          with:
+            activate-environment: objectives
+            environment-file: environment-linux.yml
+            python-version: 3.7
+            condarc-file: environment-linux.yml
+            auto-activate-base: false
+        shell: bash -l {0}
+        run: |
+          conda info
+          conda list
+      # -----------------------------------
+      # - name: build docs
+      # -----------------------------------
+      # - uses: actions/checkout@v1
+      # - uses: ammaraskar/sphinx-action@master
+      #   with:
+      #     build-command: "sphinx-build -b singlehtml . _build"
+      #     docs-folder: "docs/"
+      # -----------------------------------
+      # - name: Commit documentation changes
+      # -----------------------------------
+        # run: |
+        #   git clone https://github.com/robmacc/objectives.git --branch gh-pages --single-branch gh-pages
+        #   cp -r docs/_build/html/* gh-pages/
+        #   cd gh-pages
+        #   git config --local user.email "robmaccallum@gmail.com"
+        #   git config --local user.name "robmacc"
+        #   git add .
+        #   git commit -m "updates documentation" -a || true
+        #   # The above command will fail if no changes were present, so we ignore
+        #   # that.
+      # -----------------------------------
+      # - name: Push changes
+      # -----------------------------------
+        # uses: ad-m/github-push-action@master
+        # with:
+        #   branch: gh-pages
+        #   directory: gh-pages
+        #   github_token: ${{ secrets.GITHUB_TOKEN }}
