@@ -5,15 +5,20 @@ on:
     branches: [ master ]
 
 jobs:
-  # --------------------------------------
   build-and-publish-docs:
-  # --------------------------------------
     runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v2
-      # -----------------------------------
+
+      - name: free disk space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
+          docker rmi $(docker image ls -aq)
+          df -h
+
       - name: install CUDA
-      # -----------------------------------
         shell: bash -l {0}
         run: |
           wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-ubuntu1604.pin
@@ -22,9 +27,8 @@ jobs:
           sudo add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/ /"
           sudo apt-get update
           sudo apt-get -y install cuda
-      # -----------------------------------
+
       - name: set up conda environment
-      # -----------------------------------
         uses: goanpeca/setup-miniconda@v1
         with:
           activate-environment: objectives
@@ -32,16 +36,14 @@ jobs:
           python-version: 3.7
           condarc-file: environment.yml
           auto-activate-base: false
-      # -----------------------------------
+
       - name: check environment
-      # -----------------------------------
         shell: bash -l {0}
         run: |
           conda info
           conda list
-      # -----------------------------------
+
       - name: install pytorch with pip
-      # -----------------------------------
         shell: bash -l {0}
         run: |
           export TMPDIR='/var/tmp'
@@ -51,12 +53,12 @@ jobs:
           pip install torch-cluster==latest+cu101 -f https://pytorch-geometric.com/whl/torch-1.4.0.html 
           pip install torch-spline-conv==latest+cu101 -f https://pytorch-geometric.com/whl/torch-1.4.0.html
           pip install torch-geometric
-      # -----------------------------------
+
       - name: build docs
-      # -----------------------------------
         shell: bash -l {0}
         run: |
           sphinx-build -b singlehtml docs docs/_build
+
       # - uses: actions/checkout@v1
         # uses: ammaraskar/sphinx-action@master
         # with:
